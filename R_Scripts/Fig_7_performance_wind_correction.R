@@ -20,7 +20,6 @@ nat_reg_shp <- st_read("G:/My Drive/05_Papers/ValenciaEtAl-SRE/GIS/shp_regiones_
 
 #///////////////////////////////////////////////////////////////////////////////
 # load performance results
-
 data_daily      <- fread(paste0("G:/My Drive/R4C_et_al/4_IDEAM_GPPs","/IDEAM_GPPs_daily.csv"),head=TRUE)
 data_pentad     <- fread(paste0("G:/My Drive/R4C_et_al/4_IDEAM_GPPs","/IDEAM_GPPs_pentad.csv"),head=TRUE)
 
@@ -61,16 +60,7 @@ unique(res_month_data$nat_region)
 
 #///////////////////////////////////////////////////////////////////////////
 
-# Differences between scale and not scale performance
-
-#colnames(res_month_data)
-#var1 <- 'kge_chirps_v3_scale'
-#var2 <- 'kge_chirps_v3'
-#var1_day <- 'kge_chirps_v3_imerg_scale'
-#var2_day <- 'kge_chirps_v3_imerg'
-#database_daily  <- res_daily_data
-#database_pentad <- res_pentad_data
-#database_month  <- res_month_data
+# Differences between scale (wind correction) and not scale performance (without wind correction)
 opt_value <- 1
 plot_corr_function <- function(database_daily,database_pentad,
                                database_month,var1,var2,var1_day,var2_day,x_label,
