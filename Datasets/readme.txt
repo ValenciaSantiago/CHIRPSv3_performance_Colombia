@@ -1,3 +1,11 @@
+# Folder
+pcp_time_series      files with the time series from 2001-2023 for for the used 1,004 stations: IDEAM, CHIRPS (v2), CHIRPS (v2 & v3) at daily, pentad, monthly, and annual scales
+
+# .csv files
+ res_performance     files with the results of performance metrics (Kling-Gupta Efficiency and its components) at daily, pentad, monthly, seasonal, and annual scales
+
+
+# Description of variable names
 date                     
 gauge_code
 pcp              data provided by IDEAM via DHIME in 2025
@@ -22,7 +30,7 @@ month
 day
 nat_region        Corresponding natural region proposed by IGAC
 flag_ind          Data quality provided by DHIME; Missing values were completed with "Preliminar"
-pcp_ideam         data provided by IDEAM via full request in 2024
+pcp_ideam         data provided by IDEAM via full request in 2024 (data used in this analysis)
 pcp_ideam_flag    daily precipitation filtering P > 4 sd & preliminar data
 pcp_ideam_flag_scale    daily precipitation filtering P > 4 sd & preliminar data multiply by chirps v3 scale factor
 chirpv2           daily CHIRPv2 data
