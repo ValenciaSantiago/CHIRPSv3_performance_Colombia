@@ -82,7 +82,7 @@ kge_month_v3 <- ggplot(res_month_data, aes(x = as.factor(mean_gauges_v3_scale),
           vjust = 0, hjust = 0.5, color = "black",size=2.5)+  # Adjust text position and color
         labs(x = "Mean number of ground stations by 0.25° pixel",
              y = "Kling-Gupta \n Efficiency (KGE)", title = "CHIRPSv3") +
-        theme_classic()+
+        theme_classic() +
         scale_y_continuous(limits=c(0,1))+
         geom_hline(yintercept = median(res_month_data$kge_chirps_v3), linetype = "dotted", color = "#d95f02", size = .7)+
         theme(plot.margin = unit(c(.2, .25, .5, .2), "cm"),# #c(top, right, bottom, left)
@@ -99,346 +99,6 @@ kge_month_v3 <- ggplot(res_month_data, aes(x = as.factor(mean_gauges_v3_scale),
               legend.margin = margin(.001, 0.03, 0., 0.0025),  # unit(c(top, right, bottom, left)
               legend.box.margin = margin(1, 1, 1, 1))
 kge_month_v3
-
-
-res_month_data$mean_gauges_v2_scale <-  round(res_month_data$mean_gauges_v2,0)
-kge_month_v2 <- ggplot(res_month_data, aes(x = as.factor(mean_gauges_v2_scale),
-                                           y = kge_chirps_v2)) +
-            geom_boxplot(outlier.shape = NA, colour = adjustcolor("black", alpha.f = 0.8),
-                         fill = adjustcolor("#7a3d8d", alpha.f = .8)) +
-            # Add count annotations above each boxplot
-            geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
-            geom_text(
-              data = res_month_data %>%
-                group_by(as.factor(mean_gauges_v2_scale)) %>%
-                summarize(count = n()),  # Summarize the count of each max_gauges_v3
-              aes(x = seq(1,15,1), y = .005, label = paste0("[", count, "]")),  # Position the count text at the top of the boxplot
-              vjust = 0, hjust = 0.5, color = "black",size=2.5)+  # Adjust text position and color
-            labs(x = "Mean number of ground stations by 0.25° pixel",
-                 y = "Kling-Gupta \n Efficiency (KGE)", title = "CHIRPSv2") +
-            theme_classic()+
-            scale_y_continuous(limits=c(0,1))+
-            geom_hline(yintercept = median(res_month_data$kge_chirps_v2), linetype = "dotted", color = "#d95f02", size = .7)+
-            theme(plot.margin = unit(c(.2, .5, .5, .5), "cm"), #c(top, right, bottom, left)
-                  plot.title = element_text(size = 13,face='bold',color='black'),
-                  legend.title = element_text(size = 13, vjust = 0.0,hjust=0.5,color='black'),
-                  legend.text = element_text(size = 13,color='black'),
-                  legend.position = "none",
-                  legend.title.align = 1,
-                  axis.title.y = element_text(size = 12,vjust = 0.5,color='black'),
-                  axis.title.x = element_text(size = 12,color='black'),
-                  axis.text = element_text(size = 12,color='black'),
-                  legend.box.spacing = unit(-.001, "pt"), 
-                  legend.margin = margin(.001, 0.03, 0., 0.0025),  # unit(c(top, right, bottom, left)
-                  legend.box.margin = margin(2, 2, 2, 2)) # top, right, bottom, left
-
-
-
-
-
-
-
-res_pentad_data$mean_gauges_v3_scale <-  round(res_pentad_data$mean_gauges_v3,0)
-kge_pentad_v3 <- ggplot(res_pentad_data, aes(x = as.factor(mean_gauges_v3_scale),
-                y = kge_chirps_v3)) +
-            geom_boxplot(outlier.shape = NA, colour = adjustcolor("black", alpha.f = 0.8),
-                         fill = adjustcolor("#3d8d52", alpha.f = .8)) +
-            # Add count annotations above each boxplot
-            geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
-            geom_text(
-              data = res_month_data %>%
-                group_by(as.factor(mean_gauges_v3_scale)) %>%
-                summarize(count = n()),  # Summarize the count of each max_gauges_v3
-              aes(x = seq(1,17,1), y = .005, label = paste0("[", count, "]")),  # Position the count text at the top of the boxplot
-              vjust = 0, hjust = 0.5, color = "black",size=2.5)+  # Adjust text position and color
-            labs(x = "Mean number of ground stations by 0.25° pixel",
-                 y = "Kling-Gupta \n Efficiency (KGE)", title = "CHIRPSv3") +
-            theme_classic()+
-            scale_y_continuous(limits=c(0,1))+
-            geom_hline(yintercept = median(res_pentad_data$kge_chirps_v3), linetype = "dotted", color = "#d95f02", size = .7)+
-            theme(plot.margin = unit(c(.2, .0, .5, .2), "cm"),#c(top, right, bottom, left)
-                  plot.title = element_text(size = 13,face='bold',color='black'),
-                  legend.title = element_text(size = 15, vjust = 0.0,hjust=0.5,color='black'),
-                  legend.text = element_text(size = 13,color='black'),
-                  #axis.text  =element_text(size=12),
-                  legend.position = "none",
-                  legend.title.align = 1,
-                  axis.title.y = element_text(size = 12,vjust = 0.5,color='black'),
-                  axis.title.x = element_text(size = 12,color='black'),
-                  axis.text = element_text(size = 12,color='black'),
-                  legend.box.spacing = unit(-.001, "pt"), 
-                  legend.margin = margin(.001, 0.03, 0., 0.0025),  # unit(c(top, right, bottom, left)
-                  legend.box.margin = margin(1, 1, 1,1))
-kge_pentad_v3
-
-
-
-res_pentad_data$mean_gauges_v2_scale <-  round(res_pentad_data$mean_gauges_v2,0)
-kge_pentad_v2 <- ggplot(res_pentad_data, aes(x = as.factor(mean_gauges_v2_scale),
-                                             y = kge_chirps_v2)) +
-                    geom_boxplot(outlier.shape = NA, colour = adjustcolor("black", alpha.f = 0.8),
-                                 fill = adjustcolor("#7a3d8d", alpha.f = .8)) +
-                    # Add count annotations above each boxplot
-                    geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
-                    geom_text(
-                      data = res_month_data %>%
-                        group_by(as.factor(mean_gauges_v2_scale)) %>%
-                        summarize(count = n()),  # Summarize the count of each max_gauges_v3
-                      aes(x = seq(1,15,1), y = .005, label = paste0("[", count, "]")),  # Position the count text at the top of the boxplot
-                      vjust = 0, hjust = 0.5, color = "black",size=2.5)+  # Adjust text position and color
-                    labs(x = "Mean number of ground stations by 0.25° pixel",
-                         y = "Kling-Gupta \n Efficiency (KGE)", title = "CHIRPSv2") +
-                    theme_classic()+
-                    scale_y_continuous(limits=c(0,1))+
-                    geom_hline(yintercept = median(res_pentad_data$kge_chirps_v2), linetype = "dotted", color = "#d95f02", size = .7)+
-                    theme(plot.margin = unit(c(.2, .0, .5, .2), "cm"),
-                          plot.title = element_text(size = 13,face='bold',color='black'),
-                          legend.title = element_text(size = 15, vjust = 0.0,hjust=0.5,color='black'),
-                          legend.text = element_text(size = 13,color='black'),
-                          #axis.text  =element_text(size=12),
-                          legend.position = "none",
-                          legend.title.align = 1,
-                          axis.title.y = element_text(size = 12,vjust = 0.5,color='black'),
-                          axis.title.x = element_text(size = 12,color='black'),
-                          axis.text = element_text(size = 12,color='black'),
-                          legend.box.spacing = unit(-.001, "pt"), 
-                          legend.margin = margin(.001, 0.03, 0., 0.0025),  # unit(c(top, right, bottom, left)
-                          legend.box.margin = margin(2, 2, 2, 2)) # top, right, bottom, left
-kge_pentad_v2                  
-
-
-
-
-
-
-
-#//////////////////////////////////////////////////////////////////////////////
-
-
-r_pentad_v3 <- ggplot(res_pentad_data, aes(x = as.factor(mean_gauges_v3_scale),
-                                           y = r_chirps_v3)) +
-  geom_boxplot(outlier.shape = NA, colour = adjustcolor("black", alpha.f = 0.8),
-               fill = adjustcolor("#3d8d52", alpha.f = .8)) +
-  # Add count annotations above each boxplot
-  geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
-  geom_text(
-    data = res_month_data %>%
-      group_by(as.factor(mean_gauges_v3_scale)) %>%
-      summarize(count = n()),  # Summarize the count of each max_gauges_v3
-    aes(x = seq(1,17,1), y = .005, label = paste0("[", count, "]")),  # Position the count text at the top of the boxplot
-    vjust = 0, hjust = 0.5, color = "black",size=2.5)+  # Adjust text position and color
-  labs(x = "Mean number of ground stations by 0.25° pixel",
-       y = "Correlation coeficient (r)",, title = "CHIRPSv3") +
-  theme_classic()+
-  scale_y_continuous(limits=c(-0.05,1))+
-  geom_hline(yintercept = median(res_pentad_data$r_chirps_v3),
-             linetype = "dotted", color = "#d95f02", size = .7) +
-  theme(plot.margin = unit(c(.2, .0, .5, .2), "cm"),#c(top, right, bottom, left)
-        plot.title = element_text(size = 13,face='bold',color='black'),
-        legend.title = element_text(size = 15, vjust = 0.0,hjust=0.5,color='black'),
-        legend.text = element_text(size = 13,color='black'),
-        #axis.text  =element_text(size=12),
-        legend.position = "none",
-        legend.title.align = 1,
-        axis.title.y = element_text(size = 12,vjust = 0.5,color='black'),
-        axis.title.x = element_text(size = 12,color='black'),
-        axis.text = element_text(size = 12,color='black'),
-        legend.box.spacing = unit(-.001, "pt"), 
-        legend.margin = margin(.001, 0.03, 0., 0.0025),  # unit(c(top, right, bottom, left)
-        legend.box.margin = margin(1, 1, 1,1))
-r_pentad_v3
-
-
-
-r_pentad_v2 <- ggplot(res_pentad_data, aes(x = as.factor(mean_gauges_v2_scale),
-                                             y = r_chirps_v2)) +
-  geom_boxplot(outlier.shape = NA, colour = adjustcolor("black", alpha.f = 0.8),
-               fill = adjustcolor("#7a3d8d", alpha.f = .8)) +
-  # Add count annotations above each boxplot
-  geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
-  geom_text(
-    data = res_month_data %>%
-      group_by(as.factor(mean_gauges_v2_scale)) %>%
-      summarize(count = n()),  # Summarize the count of each max_gauges_v3
-    aes(x = seq(1,15,1), y = .005, label = paste0("[", count, "]")),  # Position the count text at the top of the boxplot
-    vjust = 0, hjust = 0.5, color = "black",size=2.5)+  # Adjust text position and color
-  labs(x = "Mean number of ground stations by 0.25° pixel",
-       y = 'Correlation coefficient (r)', title = "CHIRPSv2") +
-  theme_classic()+
-  scale_y_continuous(limits=c(0,1))+
-  geom_hline(yintercept = median(res_pentad_data$r_chirps_v2), linetype = "dotted", color = "#d95f02", size = .7)+
-  theme(plot.margin = unit(c(.2, .0, .5, .2), "cm"),
-        plot.title = element_text(size = 13,face='bold',color='black'),
-        legend.title = element_text(size = 15, vjust = 0.0,hjust=0.5,color='black'),
-        legend.text = element_text(size = 13,color='black'),
-        #axis.text  =element_text(size=12),
-        legend.position = "none",
-        legend.title.align = 1,
-        axis.title.y = element_text(size = 12,vjust = 0.5,color='black'),
-        axis.title.x = element_text(size = 12,color='black'),
-        axis.text = element_text(size = 12,color='black'),
-        legend.box.spacing = unit(-.001, "pt"), 
-        legend.margin = margin(.001, 0.03, 0., 0.0025),  # unit(c(top, right, bottom, left)
-        legend.box.margin = margin(2, 2, 2, 2)) # top, right, bottom, left
-r_pentad_v2 
-
-
-B_pentad_v3 <- ggplot(res_pentad_data, aes(x = as.factor(mean_gauges_v3_scale),
-                                             y = B_chirps_v3)) +
-  geom_boxplot(outlier.shape = NA, colour = adjustcolor("black", alpha.f = 0.8),
-               fill = adjustcolor("#3d8d52", alpha.f = .8)) +
-  # Add count annotations above each boxplot
-  geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
-  #geom_text(
-  #  data = res_month_data %>%
-  #    group_by(as.factor(mean_gauges_v3_scale)) %>%
-  #    summarize(count = n()),  # Summarize the count of each max_gauges_v3
-  #  aes(x = seq(1,17,1), y = .005, label = paste0("[", count, "]")),  # Position the count text at the top of the boxplot
-  #  vjust = 0, hjust = 0.5, color = "black",size=2.5)+  # Adjust text position and color
-  labs(x = "Mean number of ground stations by 0.25° pixel",
-       y = paste0("Bias ratio (","\u03B2",")"), title = "") +
-  theme_classic()+
-  scale_y_continuous(limits=c(0,2))+
-  geom_hline(yintercept = median(res_pentad_data$B_chirps_v3),
-             linetype = "dotted", color = "#d95f02", size = .7) +
-  theme(plot.margin = unit(c(.2, .0, .5, .2), "cm"),#c(top, right, bottom, left)
-        plot.title = element_text(size = 13,face='bold',color='black'),
-        legend.title = element_text(size = 15, vjust = 0.0,hjust=0.5,color='black'),
-        legend.text = element_text(size = 13,color='black'),
-        #axis.text  =element_text(size=12),
-        legend.position = "none",
-        legend.title.align = 1,
-        axis.title.y = element_text(size = 12,vjust = 0.5,color='black'),
-        axis.title.x = element_text(size = 12,color='black'),
-        axis.text = element_text(size = 12,color='black'),
-        legend.box.spacing = unit(-.001, "pt"), 
-        legend.margin = margin(.001, 0.03, 0., 0.0025),  # unit(c(top, right, bottom, left)
-        legend.box.margin = margin(1, 1, 1,1))
-B_pentad_v3
-
-
-
-
-
-B_pentad_v2 <- ggplot(res_pentad_data, aes(x = as.factor(mean_gauges_v2_scale),
-                                           y = B_chirps_v2)) +
-  geom_boxplot(outlier.shape = NA, colour = adjustcolor("black", alpha.f = 0.8),
-               fill = adjustcolor("#7a3d8d", alpha.f = .8)) +
-  # Add count annotations above each boxplot
-  geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
-  #geom_text(
-  #  data = res_month_data %>%
-  #    group_by(as.factor(mean_gauges_v2_scale)) %>%
-  #    summarize(count = n()),  # Summarize the count of each max_gauges_v3
-  #  aes(x = seq(1,15,1), y = .005, label = paste0("[", count, "]")),  # Position the count text at the top of the boxplot
-  #  vjust = 0, hjust = 0.5, color = "black",size=2.5)+  # Adjust text position and color
-  labs(x = "Mean number of ground stations by 0.25° pixel",
-       y = paste0("Bias ratio (","\u03B2",")"), title = "") +
-  theme_classic()+
-  scale_y_continuous(limits=c(0,2))+
-  geom_hline(yintercept = median(res_pentad_data$B_chirps_v2), linetype = "dotted", color = "#d95f02", size = .7)+
-  theme(plot.margin = unit(c(.2, .0, .5, .2), "cm"),
-        plot.title = element_text(size = 13,face='bold',color='black'),
-        legend.title = element_text(size = 15, vjust = 0.0,hjust=0.5,color='black'),
-        legend.text = element_text(size = 13,color='black'),
-        #axis.text  =element_text(size=12),
-        legend.position = "none",
-        legend.title.align = 1,
-        axis.title.y = element_text(size = 12,vjust = 0.5,color='black'),
-        axis.title.x = element_text(size = 12,color='black'),
-        axis.text = element_text(size = 12,color='black'),
-        legend.box.spacing = unit(-.001, "pt"), 
-        legend.margin = margin(.001, 0.03, 0., 0.0025),  # unit(c(top, right, bottom, left)
-        legend.box.margin = margin(2, 2, 2, 2)) # top, right, bottom, left
-B_pentad_v2
-
-
-
-
-
-G_pentad_v3 <- ggplot(res_pentad_data, aes(x = as.factor(mean_gauges_v3_scale),
-                                           y = G_chirps_v3)) +
-  geom_boxplot(outlier.shape = NA, colour = adjustcolor("black", alpha.f = 0.8),
-               fill = adjustcolor("#3d8d52", alpha.f = .8)) +
-  # Add count annotations above each boxplot
-  geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
-  #geom_text(
-  #  data = res_month_data %>%
-  #    group_by(as.factor(mean_gauges_v3_scale)) %>%
-  #    summarize(count = n()),  # Summarize the count of each max_gauges_v3
-  #  aes(x = seq(1,17,1), y = .005, label = paste0("[", count, "]")),  # Position the count text at the top of the boxplot
-  #  vjust = 0, hjust = 0.5, color = "black",size=2.5)+  # Adjust text position and color
-  labs(x = "Mean number of ground stations by 0.25° pixel",
-       y = paste0("Variability ratio (","\u03B3",")"), title = "") +
-  theme_classic()+
-  scale_y_continuous(limits=c(0,1.5))+
-  geom_hline(yintercept = median(res_pentad_data$G_chirps_v3),
-             linetype = "dotted", color = "#d95f02", size = .7) +
-  theme(plot.margin = unit(c(.2, .0, .5, .2), "cm"),#c(top, right, bottom, left)
-        plot.title = element_text(size = 13,face='bold',color='black'),
-        legend.title = element_text(size = 15, vjust = 0.0,hjust=0.5,color='black'),
-        legend.text = element_text(size = 13,color='black'),
-        #axis.text  =element_text(size=12),
-        legend.position = "none",
-        legend.title.align = 1,
-        axis.title.y = element_text(size = 12,vjust = 0.5,color='black'),
-        axis.title.x = element_text(size = 12,color='black'),
-        axis.text = element_text(size = 12,color='black'),
-        legend.box.spacing = unit(-.001, "pt"), 
-        legend.margin = margin(.001, 0.03, 0., 0.0025),  # unit(c(top, right, bottom, left)
-        legend.box.margin = margin(1, 1, 1,1))
-G_pentad_v3
-
-
-
-
-G_pentad_v2 <- ggplot(res_pentad_data, aes(x = as.factor(mean_gauges_v2_scale),
-                                           y = G_chirps_v2)) +
-  geom_boxplot(outlier.shape = NA, colour = adjustcolor("black", alpha.f = 0.8),
-               fill = adjustcolor("#7a3d8d", alpha.f = .8)) +
-  # Add count annotations above each boxplot
-  geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
-  #geom_text(
-  #  data = res_month_data %>%
-  #    group_by(as.factor(mean_gauges_v2_scale)) %>%
-  #    summarize(count = n()),  # Summarize the count of each max_gauges_v3
-  #  aes(x = seq(1,15,1), y = .005, label = paste0("[", count, "]")),  # Position the count text at the top of the boxplot
-  #  vjust = 0, hjust = 0.5, color = "black",size=2.5)+  # Adjust text position and color
-  labs(x = "Mean number of ground stations by 0.25° pixel",
-       y = paste0("Variability ratio (","\u03B3",")"), title = "") +
-  theme_classic()+
-  scale_y_continuous(limits=c(0,1.5))+
-  geom_hline(yintercept = median(res_pentad_data$G_chirps_v2), linetype = "dotted", color = "#d95f02", size = .7)+
-  theme(plot.margin = unit(c(.2, .0, .5, .2), "cm"),
-        plot.title = element_text(size = 13,face='bold',color='black'),
-        legend.title = element_text(size = 15, vjust = 0.0,hjust=0.5,color='black'),
-        legend.text = element_text(size = 13,color='black'),
-        #axis.text  =element_text(size=12),
-        legend.position = "none",
-        legend.title.align = 1,
-        axis.title.y = element_text(size = 12,vjust = 0.5,color='black'),
-        axis.title.x = element_text(size = 12,color='black'),
-        axis.text = element_text(size = 12,color='black'),
-        legend.box.spacing = unit(-.001, "pt"), 
-        legend.margin = margin(.001, 0.03, 0., 0.0025),  # unit(c(top, right, bottom, left)
-        legend.box.margin = margin(2, 2, 2, 2)) # top, right, bottom, left
-G_pentad_v2
-
-
-
-
-png(paste0(dir_plots ,"/SUPP_PLOTS/",
-           "Fig_performance_stations_pentad_metrics.png"), units = "in",
-    width = 11, height = 7.5, res = 600, pointsize = 11)
-
-
-ggarrange(r_pentad_v2,r_pentad_v3,
-          B_pentad_v2,B_pentad_v3,
-          G_pentad_v2,G_pentad_v3,
-          nrow=3,ncol=2,labels=c('a','b','c',
-                                 'd','e','f'))
-dev.off()
-
 
 
 #///////////////////////////////////////////////////////////////////////////
@@ -622,7 +282,7 @@ r_periods1<- r_periods
 r_periods1 <- r_periods1+ scale_y_continuous(
   limits = c(-0.75, 1),  # Set numeric limits
   breaks = c(-0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0),  # Numeric breaks
-  labels = c("", "-0.50", "", "0", "", "0.50", "", "1.0"))
+  labels = c("", "-0.5", "", "0", "", "0.5", "", "1"))
 
 #r_pentad <- r_pentad + theme(legend.position = "none")
 B_periods <- B_periods +   theme(legend.position = "none",
@@ -637,7 +297,7 @@ kge_periods <- kge_periods +   theme(legend.position = "none",
 kge_periods <- kge_periods + scale_y_continuous(
   limits = c(-0.75, 1),  # Set numeric limits
   breaks = c(-0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0),  # Numeric breaks
-  labels = c("", "-0.50", "", "0", "", "0.50", "", "1.0"))
+  labels = c("", "-0.5", "", "0", "", "0.5", "", "1"))
 
 
 
@@ -697,7 +357,7 @@ r_pentad_periods1<- r_pentad_periods
 r_pentad_periods1 <- r_pentad_periods1+ scale_y_continuous(
   limits = c(-0.75, 1),  # Set numeric limits
   breaks = c(-0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0),  # Numeric breaks
-  labels = c("", "-0.50", "", "0", "", "0.50", "", "1.0"))
+  labels = c("", "-0.5", "", "0", "", "0.5", "", "1"))
 
 #r_pentad <- r_pentad + theme(legend.position = "none")
 B_pentad_periods <- B_pentad_periods +   theme(legend.position = "none",
@@ -712,11 +372,441 @@ kge_pentad_periods <- kge_pentad_periods +   theme(legend.position = "none",
 kge_pentad_periods <- kge_pentad_periods + scale_y_continuous(
   limits = c(-0.75, 1),  # Set numeric limits
   breaks = c(-0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0),  # Numeric breaks
-  labels = c("", "-0.50", "", "0", "", "0.50", "", "1.0"))
+  labels = c("", "-0.5", "", "0", "", "0.5", "", "1"))
 
 
 #____________________________________________________________________________
 # plot
+
+
+res_long <- res_month_data %>%
+  select(mean_gauges_v2, mean_gauges_v3, kge_chirps_v2, kge_chirps_v3) %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = c(".value", "version"),
+    names_pattern = "(.*)_(v[23])")
+
+
+res_long$mean_gauges <- round(res_long$mean_gauges,0)
+kge_month_v3_v2 <- ggplot(res_long, aes(x = as.factor(mean_gauges), y = kge_chirps, fill = version)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.95, position = position_dodge(width = .85)) +
+  scale_fill_manual(values = c("v2" = "#7a3d8d", "v3" = "#3d8d52"),
+                    labels = c("CHIRPSv2", "CHIRPSv3")) +
+  labs(
+    x = "Mean number of ground stations by 0.25° pixel",
+    y = "Kling-Gupta \n Efficiency (KGE)",
+    fill = "Version",
+    title = "") +
+  theme_classic() +
+  #geom_hline(yintercept = median(res_month_data$kge_chirps_v2),
+  #           linetype = "dotted", color = "#d95f02", size = .7)+
+  #geom_hline(yintercept = median(res_month_data$kge_chirps_v3),
+  #           linetype = "dashed", color = "#d95f02", size = .7)+ 
+  geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
+  scale_y_continuous(limits = c(0,1)) +
+  theme(
+    plot.title = element_text(size = 13, face = "bold", color = "black"),
+    axis.title = element_text(size = 12, color = "black"),
+    axis.text = element_text(size = 12, color = "black"),
+    legend.title = element_text(size = 12, color = "black"),
+    legend.text = element_text(size = 12, color = "black"),
+    legend.position = c(0.7, 0.3),  # esquina inferior izquierda
+    legend.justification = c("right", "top"))  # asegura que la referencia sea la esquina
+    #legend.position = "none")
+    
+
+
+kge_month_v3_v2 <- kge_month_v3_v2 +
+  theme(
+    legend.position = c(0.95, 1.15),
+    legend.direction = "horizontal",   # ← leyenda horizontal
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10),
+    legend.background = element_rect(fill = NA, color = NA)) +
+  guides(
+    fill = guide_legend(
+      title.position = "left",  # ← título a la izquierda
+      title.hjust = 0.5,
+      nrow = 1  ))                # ← una sola fila (horizontal)
+kge_month_v3_v2
+
+
+
+#png(paste0(dir_plots ,"/", "Fig6_performance_stations_pentad.png"), units = "in",
+#    width = 10, height = 5, res = 600, pointsize = 11)
+png(paste0(dir_plots, "/", "Fig_6_performance_CHIRPvx_number_stations_monthly_v2.png"),
+    width = 10, height = 5, pointsize = 11,units = "in",res=600)
+#library(grDevices )
+#cairo_pdf(paste0(dir_plots, "/", "Fig_6_performance_CHIRPvx_number_stations_pentad.pdf"),
+#          width = 10, height = 5, pointsize = 11)
+r_periods11 <- r_periods1 + theme(plot.margin = unit(c(.02, .0, .05, .0), "cm"))
+kge_month_v3_v2 <- kge_month_v3_v2
+
+blank_plot <- ggplot() + theme_void()
+p1 <- ggarrange(ggarrange(blank_plot,kge_month_v3_v2,
+                          widths = c(.2,10),ncol = 2, nrow = 1, align = "h", 
+                          labels = c("","a", "b"),label.x = c(0), label.y = 1.06,hjust = -6, vjust = 3),
+                ggarrange(r_periods11,B_periods,G_periods,kge_periods,
+                          # r_periods,B_periods,G_periods,kge_periods,
+                          ncol = 4, nrow = 1,labels = c("e", "f","g",'h'),
+                          label.x = c(0.27,-0.03,-0.05,-0.05),
+                          align='h',widths = c(10.5,8,8,8)),
+                ncol=1,nrow=2,align='hv',heights=c(3.5,3))
+
+print(p1)
+dev.off()
+
+
+
+
+# Pentad
+res_long <- res_pentad_data %>%
+  select(mean_gauges_v2, mean_gauges_v3, kge_chirps_v2, kge_chirps_v3) %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = c(".value", "version"),
+    names_pattern = "(.*)_(v[23])")
+
+
+res_long$mean_gauges <- round(res_long$mean_gauges,0)
+kge_month_v3_v2 <- ggplot(res_long, aes(x = as.factor(mean_gauges), y = kge_chirps, fill = version)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.95, position = position_dodge(width = .85)) +
+  scale_fill_manual(values = c("v2" = "#7a3d8d", "v3" = "#3d8d52"),
+                    labels = c("CHIRPSv2", "CHIRPSv3")) +
+  labs(
+    x = "Mean number of ground stations by 0.25° pixel",
+    y = "Kling-Gupta \n Efficiency (KGE)",
+    fill = "Version",
+    title = "") +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
+  theme_classic() +
+  #geom_hline(yintercept = median(res_month_data$kge_chirps_v2),
+  #           linetype = "dotted", color = "#d95f02", size = .7)+
+  #geom_hline(yintercept = median(res_month_data$kge_chirps_v3),
+  #           linetype = "dashed", color = "#d95f02", size = .7)+ 
+  scale_y_continuous(limits = c(0,1)) +
+  theme(
+    plot.title = element_text(size = 13, face = "bold", color = "black"),
+    axis.title = element_text(size = 12, color = "black"),
+    axis.text = element_text(size = 12, color = "black"),
+    legend.title = element_text(size = 12, color = "black"),
+    legend.text = element_text(size = 12, color = "black"),
+    legend.position = c(0.7, 0.3),  # esquina inferior izquierda
+    legend.justification = c("right", "top"))  # asegura que la referencia sea la esquina
+#legend.position = "none")
+
+
+
+kge_month_v3_v2 <- kge_month_v3_v2 +
+  theme(
+    legend.position = c(0.95, 1.15),
+    legend.direction = "horizontal",   # ← leyenda horizontal
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10),
+    legend.background = element_rect(fill = NA, color = NA)) +
+  guides(
+    fill = guide_legend(
+      title.position = "left",  # ← título a la izquierda
+      title.hjust = 0.5,
+      nrow = 1  ))                # ← una sola fila (horizontal)
+kge_month_v3_v2
+
+
+#png(paste0(dir_plots ,"/", "Fig6_performance_stations_pentad.png"), units = "in",
+#    width = 10, height = 5, res = 600, pointsize = 11)
+png(paste0(dir_plots, "/", "Fig_6_performance_CHIRPvx_number_stations_pentad_v2.png"),
+    width = 10, height = 5, pointsize = 11,units = "in",res=600)
+#library(grDevices )
+#cairo_pdf(paste0(dir_plots, "/", "Fig_6_performance_CHIRPvx_number_stations_pentad.pdf"),
+#          width = 10, height = 5, pointsize = 11)
+r_pentad_periods11 <- r_pentad_periods1 + theme(plot.margin = unit(c(.02, .0, .05, .0), "cm"))
+kge_month_v3_v2 <- kge_month_v3_v2
+
+blank_plot <- ggplot() + theme_void()
+p1 <- ggarrange(ggarrange(blank_plot,kge_month_v3_v2,
+                          widths = c(.2,10),ncol = 2, nrow = 1, align = "h", 
+                          labels = c("","a", "b"),label.x = c(0), label.y = 1.06,hjust = -6, vjust = 3),
+                ggarrange(r_pentad_periods11,B_pentad_periods,G_pentad_periods,
+                          kge_pentad_periods,
+                          # r_periods,B_periods,G_periods,kge_periods,
+                          ncol = 4, nrow = 1,labels = c("e", "f","g",'h'),
+                          label.x = c(0.27,-0.03,-0.05,-0.05),
+                          align='h',widths = c(10.5,8,8,8)),
+                ncol=1,nrow=2,align='hv',heights=c(3.5,3))
+
+print(p1)
+dev.off()
+
+
+
+
+# Wilcoxon test
+# Pentad
+wilcox.test(
+  res_pentad_data_p1$kge_chirp_v2,
+  res_pentad_data_p2$kge_chirp_v2,
+  paired = TRUE,
+  alternative = "two.sided")
+
+wilcox.test(
+  res_pentad_data_p1$kge_chirp_v3,
+  res_pentad_data_p2$kge_chirp_v3,
+  paired = TRUE,
+  alternative = "two.sided")
+
+
+# Monthly
+wilcox.test(
+  res_month_data_p1$r_chirp_v2,
+  res_month_data_p2$r_chirp_v2,
+  paired = TRUE,
+  alternative = "two.sided")
+
+wilcox.test(
+  res_month_data_p2$r_chirp_v3,
+  res_month_data_p1$r_chirp_v3,
+  paired = TRUE,
+  alternative = "two.sided")
+
+#
+
+
+
+
+# KGE components - pentad scale 
+
+# Correlation
+res_long_r <- res_pentad_data %>%
+  select(mean_gauges_v2, mean_gauges_v3, r_chirps_v2, r_chirps_v3) %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = c(".value", "version"),
+    names_pattern = "(.*)_(v[23])")
+
+
+res_long_r$mean_gauges <- round(res_long_r$mean_gauges,0)
+r_pentad_v3_v2 <- ggplot(res_long_r, aes(x = as.factor(mean_gauges), y = r_chirps, fill = version)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.95, position = position_dodge(width = .85)) +
+  scale_fill_manual(values = c("v2" = "#7a3d8d", "v3" = "#3d8d52"),
+                    labels = c("CHIRPSv2", "CHIRPSv3")) +
+  labs(
+    x = "",
+    y = "Correlation coefficient (r)",
+    fill = "Version",
+    title = "") +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
+  theme_classic() +
+  #geom_hline(yintercept = median(res_month_data$kge_chirps_v2),
+  #           linetype = "dotted", color = "#d95f02", size = .7)+
+  #geom_hline(yintercept = median(res_month_data$kge_chirps_v3),
+  #           linetype = "dashed", color = "#d95f02", size = .7)+ 
+  scale_y_continuous(limits = c(0,1)) +
+  theme(
+    plot.title = element_text(size = 13, face = "bold", color = "black"),
+    axis.title = element_text(size = 12, color = "black"),
+    axis.text = element_text(size = 12, color = "black"),
+    legend.title = element_text(size = 12, color = "black"),
+    legend.text = element_text(size = 12, color = "black"),
+    legend.position = c(0.7, 0.3),  # esquina inferior izquierda
+    legend.justification = c("right", "top"))  
+#legend.position = "none")
+
+
+r_pentad_v3_v2 <- r_pentad_v3_v2 +
+  theme(
+    legend.position = c(0.95, 1.15),
+    legend.direction = "horizontal",   # ← leyenda horizontal
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10),
+    legend.background = element_rect(fill = NA, color = NA)) +
+  guides(
+    fill = guide_legend(
+      title.position = "left",  # ← título a la izquierda
+      title.hjust = 0.5,
+      nrow = 1  ))                # ← una sola fila (horizontal)
+r_pentad_v3_v2
+
+
+# Bias
+res_long_B <- res_pentad_data %>%
+  select(mean_gauges_v2, mean_gauges_v3, B_chirps_v2, B_chirps_v3) %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = c(".value", "version"),
+    names_pattern = "(.*)_(v[23])")
+
+
+res_long_B$mean_gauges <- round(res_long_B$mean_gauges,0)
+B_pentad_v3_v2 <- ggplot(res_long_B, aes(x = as.factor(mean_gauges), y = B_chirps, fill = version)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.95, position = position_dodge(width = .85)) +
+  scale_fill_manual(values = c("v2" = "#7a3d8d", "v3" = "#3d8d52"),
+                    labels = c("CHIRPSv2", "CHIRPSv3")) +
+  labs(
+    x = "",
+    y = paste0("Bias ratio (","\u03B2",")"),
+    fill = "Version",
+    title = "") +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
+  theme_classic() +
+  #geom_hline(yintercept = median(res_month_data$kge_chirps_v2),
+  #           linetype = "dotted", color = "#d95f02", size = .7)+
+  #geom_hline(yintercept = median(res_month_data$kge_chirps_v3),
+  #           linetype = "dashed", color = "#d95f02", size = .7)+ 
+  scale_y_continuous(limits = c(0,2)) +
+  theme(
+    plot.title = element_text(size = 13, face = "bold", color = "black"),
+    axis.title = element_text(size = 12, color = "black"),
+    axis.text = element_text(size = 12, color = "black"),
+    legend.title = element_text(size = 12, color = "black"),
+    legend.text = element_text(size = 12, color = "black"),
+    legend.position = c(0.7, 0.3),  # esquina inferior izquierda
+    legend.justification = c("right", "top"))  
+#legend.position = "none")
+
+
+
+
+# Variability ratio
+res_long_G <- res_pentad_data %>%
+  select(mean_gauges_v2, mean_gauges_v3, G_chirps_v2, G_chirps_v3) %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = c(".value", "version"),
+    names_pattern = "(.*)_(v[23])")
+
+
+res_long_G$mean_gauges <- round(res_long_G$mean_gauges,0)
+G_pentad_v3_v2 <- ggplot(res_long_G, aes(x = as.factor(mean_gauges), y = G_chirps, fill = version)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.95, position = position_dodge(width = .85)) +
+  scale_fill_manual(values = c("v2" = "#7a3d8d", "v3" = "#3d8d52"),
+                    labels = c("CHIRPSv2", "CHIRPSv3")) +
+  labs(
+    x = "Mean number of ground stations by 0.25° pixel",
+    y = paste0("Variability ratio (","\u03B3",")"),
+    fill = "Version",
+    title = "") +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
+  theme_classic() +
+  #geom_hline(yintercept = median(res_month_data$kge_chirps_v2),
+  #           linetype = "dotted", color = "#d95f02", size = .7)+
+  #geom_hline(yintercept = median(res_month_data$kge_chirps_v3),
+  #           linetype = "dashed", color = "#d95f02", size = .7)+ 
+  scale_y_continuous(limits = c(0,1.5)) +
+  theme(
+    plot.title = element_text(size = 13, face = "bold", color = "black"),
+    axis.title = element_text(size = 12, color = "black"),
+    axis.text = element_text(size = 12, color = "black"),
+    legend.title = element_text(size = 12, color = "black"),
+    legend.text = element_text(size = 12, color = "black"),
+    legend.position = c(0.7, 0.3),  # esquina inferior izquierda
+    legend.justification = c("right", "top"))  
+#legend.position = "none")
+
+
+
+
+png(paste0(dir_plots ,"/SUPP_PLOTS/",
+           "Fig_performance_stations_pentad_metrics.png"), units = "in",
+    width = 9, height = 7.8, res = 600, pointsize = 11)
+
+B_pentad_v3_v2 <- B_pentad_v3_v2 +  theme(legend.position = "none")
+G_pentad_v3_v2 <- G_pentad_v3_v2 +  theme(legend.position = "none")
+
+ggarrange(r_pentad_v3_v2,
+          B_pentad_v3_v2,
+          G_pentad_v3_v2,align='hv',
+          nrow=3,ncol=1,labels=c('a','b','c'))
+
+dev.off()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+G_pentad_v2 <- ggplot(res_pentad_data, aes(x = as.factor(mean_gauges_v2_scale),
+                                           y = G_chirps_v2)) +
+  geom_boxplot(outlier.shape = NA, colour = adjustcolor("black", alpha.f = 0.8),
+               fill = adjustcolor("#7a3d8d", alpha.f = .8)) +
+  # Add count annotations above each boxplot
+  geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
+  #geom_text(
+  #  data = res_month_data %>%
+  #    group_by(as.factor(mean_gauges_v2_scale)) %>%
+  #    summarize(count = n()),  # Summarize the count of each max_gauges_v3
+  #  aes(x = seq(1,15,1), y = .005, label = paste0("[", count, "]")),  # Position the count text at the top of the boxplot
+  #  vjust = 0, hjust = 0.5, color = "black",size=2.5)+  # Adjust text position and color
+  labs(x = "Mean number of ground stations by 0.25° pixel",
+       y = paste0("Variability ratio (","\u03B3",")"), title = "") +
+  theme_classic()+
+  scale_y_continuous(limits=c(0,1.5))+
+  geom_hline(yintercept = median(res_pentad_data$G_chirps_v2), linetype = "dotted", color = "#d95f02", size = .7)+
+  theme(plot.margin = unit(c(.2, .0, .5, .2), "cm"),
+        plot.title = element_text(size = 13,face='bold',color='black'),
+        legend.title = element_text(size = 15, vjust = 0.0,hjust=0.5,color='black'),
+        legend.text = element_text(size = 13,color='black'),
+        #axis.text  =element_text(size=12),
+        legend.position = "none",
+        legend.title.align = 1,
+        axis.title.y = element_text(size = 12,vjust = 0.5,color='black'),
+        axis.title.x = element_text(size = 12,color='black'),
+        axis.text = element_text(size = 12,color='black'),
+        legend.box.spacing = unit(-.001, "pt"), 
+        legend.margin = margin(.001, 0.03, 0., 0.0025),  # unit(c(top, right, bottom, left)
+        legend.box.margin = margin(2, 2, 2, 2)) # top, right, bottom, left
+G_pentad_v2
+
+
+
+
+png(paste0(dir_plots ,"/SUPP_PLOTS/",
+           "Fig_performance_stations_pentad_metrics.png"), units = "in",
+    width = 11, height = 7.5, res = 600, pointsize = 11)
+
+
+ggarrange(r_pentad_v2,r_pentad_v3,
+          B_pentad_v2,B_pentad_v3,
+          G_pentad_v2,G_pentad_v3,
+          nrow=3,ncol=2,labels=c('a','b','c',
+                                 'd','e','f'))
+dev.off()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #png(paste0(dir_plots ,"/", "Fig6_performance_stations_pentad.png"), units = "in",
 #    width = 10, height = 5, res = 600, pointsize = 11)
@@ -747,6 +837,8 @@ dev.off()
 
 
 
+
+
 png(paste0(dir_plots ,"/SUPP_PLOTS/",
            "Fig_performance_stations_monthly.png"), units = "in",
     width = 12, height = 6, res = 600, pointsize = 11)
@@ -768,6 +860,8 @@ p1 <- ggarrange(ggarrange(blank_plot,kge_month_v2,kge_month_v3,
 
 print(p1)
 dev.off()
+
+
 
 
 

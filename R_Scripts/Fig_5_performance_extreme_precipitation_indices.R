@@ -4,10 +4,11 @@ library('pacman')
 p_load(terra, tidyverse, rnaturalearth, glue, lubridate, zoo,rlang,ggpubr,
        data.table)
 
-ext_ind_df <- as.data.frame(fread(paste0("G:/My Drive/R4C_et_al/4_IDEAM_GPPs",
+dir_datasets <- 'C:/Users/santiagovalencia/OneDrive - University of Arizona/Documents/GitHub/CHIRPSv3_performance_Colombia/Datasets'
+ext_ind_df <- as.data.frame(fread(paste0(dir_datasets,
                   "/daily_extreme_precipitation_indices_2001_2023.csv")),head=TRUE)
-res_ext_ind_df <- as.data.frame(fread(paste0("G:/My Drive/R4C_et_al/4_IDEAM_GPPs",
-                  "/res_performance_extreme_precipitation_indices_2001_2023.csv")),head=TRUE)
+res_ext_ind_df <- as.data.frame(fread(paste0(dir_datasets,
+                  "/res_performance_extreme_precipitation_indices_2001_2023_v2.csv")),head=TRUE)
 
 
 colnames(ext_ind_df)
@@ -73,7 +74,7 @@ p <- ggplot() +
     "CHIRPSv2" = "#7a3d8d", 
     "CHIRPSv3-IMERG" = "#3d8d52",
     "CHIRPSv3-ERA5" = "#9ec6bc",
-    'IDEAM' = '#0000004D'))+ coord_flip()
+    'IDEAM' = adjustcolor("black", alpha.f = 0.1)))+ coord_flip()
 print(p)
 return(p)
 }
@@ -111,7 +112,7 @@ sdii_plot <- ext_ind_plot(ext_ind_df,'SDII (mm/day)','SDII_chirpsv2','SDII_chirp
 
 
 png("G:/My Drive/R4C_et_al/3_PLOTS/Fig_extreme_indices_daily.png",
-    units = "in",width = 12, height =10, 
+    units = "in",width = 15, height =5.5, 
     res = 600, pointsize = 11)#, bg = "transparent")
 #pdf("G:/My Drive/R4C_et_al/3_PLOTS/Fig_5_performance_extreme_indices.pdf",
 #    width = 12, height = 10, pointsize = 11)
@@ -119,14 +120,14 @@ png("G:/My Drive/R4C_et_al/3_PLOTS/Fig_extreme_indices_daily.png",
 ggarrange(r10_plot,
           r20_plot + theme(axis.text.y = element_blank()),
           Rx1_plot + theme(axis.text.y = element_blank()),
-          Rx5_plot,
+          Rx5_plot+ theme(axis.text.y = element_blank()),
           CDD_plot + theme(axis.text.y = element_blank()),
-          CWD_plot + theme(axis.text.y = element_blank()),
-          r95_plot,# + theme(axis.text.y = element_blank()),
+          CWD_plot,#+ theme(axis.text.y = element_blank()),
+          r95_plot + theme(axis.text.y = element_blank()),
           r99_plot + theme(axis.text.y = element_blank()),
           rtotal_plot + theme(axis.text.y = element_blank()),
-          sdii_plot,
-          ncol=3,nrow=4,widths = c(4.5,3,3),
+          sdii_plot + theme(axis.text.y = element_blank()),
+          ncol=5,nrow=2,widths = c(3,2,2,2,2),
           labels=c('a','b','c','d','e','f','g','h','i','j'))
 
 dev.off()
@@ -391,6 +392,7 @@ ggarrange(kge_rtotal,kge_r95,kge_r99,kge_CDD,kge_CWD,
 
 dev.off()
   
+
  
 
 
@@ -739,6 +741,344 @@ ggarrange(G_rtotal,G_r95,G_r99,G_CDD,G_CWD,
 
 
 dev.off()
+
+
+#___________________________________________________________________
+# Spearman Correlation coefficient (r)
+
+regions <- c("Pacifico","Andes","Caribe","Amazonia","Orinoquia","Amazonas")
+region_name <- 'COL'
+
+sp_r95 <-   performance_plot_ext_indices(res_ext_ind_df,
+                                        c('v2_r95_spearman_cor','v3_era_r95_spearman_cor',
+                                          'v3_imerg_r95_spearman_cor'),
+                                        "R95p",'',-1,1,.5,1,
+                                        regions)
+
+sp_r99 <-   performance_plot_ext_indices(res_ext_ind_df,
+                                        c('v2_r99_spearman_cor','v3_era_r99_spearman_cor',
+                                          'v3_imerg_r99_spearman_cor'),
+                                        'R99p',paste0("Spearman’s rank correlation (","\u03C1",")"),-1,1,.5,1,
+                                        regions)
+
+sp_rtotal <-   performance_plot_ext_indices(res_ext_ind_df,
+                                           c('v2_rtotal_spearman_cor','v3_era_rtotal_spearman_cor',
+                                             'v3_imerg_rtotal_spearman_cor'),
+                                           'PRCPTOT','',-1,1,.5,1,
+                                           regions)
+
+sp_rtotal <- sp_rtotal + 
+  theme(
+    legend.position = c(0.25, 0.3),  
+    legend.title = element_text(size = 11),
+    legend.text = element_text(size = 10,color='black'))+  
+  guides(fill = guide_legend(ncol = 1)) +
+  #theme_minimal(base_size = 14) +
+  theme(#legend.position = 'top', 
+    legend.spacing.x = unit(.01, 'cm'),
+    legend.background = element_rect(fill = NA, color = NA))
+sp_rtotal
+
+
+sp_CDD <-   performance_plot_ext_indices(res_ext_ind_df,
+                                        c('v2_CDD_spearman_cor','v3_era_CDD_spearman_cor',
+                                          'v3_imerg_CDD_spearman_cor'),
+                                        'CDD','',-1,1,.5,1,
+                                        regions)
+
+sp_CWD <-   performance_plot_ext_indices(res_ext_ind_df,
+                                        c('v2_CWD_spearman_cor','v3_era_CWD_spearman_cor',
+                                          'v3_imerg_CWD_spearman_cor'),
+                                        'CWD','',-1,1,.5,1,
+                                        regions)
+
+
+sp_R10mm <-   performance_plot_ext_indices(res_ext_ind_df,
+                                          c('v2_R10mm_spearman_cor','v3_era_R10mm_spearman_cor',
+                                            'v3_imerg_R10mm_spearman_cor'),
+                                          'R10mm','',-1,1,.5,1,
+                                          regions)
+
+sp_R20mm <-   performance_plot_ext_indices(res_ext_ind_df,
+                                          c('v2_R20mm_spearman_cor','v3_era_R20mm_spearman_cor',
+                                            'v3_imerg_R20mm_spearman_cor'),
+                                          'R20mm','',-1,1,.5,1,
+                                          regions)
+
+
+sp_Rx1 <-   performance_plot_ext_indices(res_ext_ind_df,
+                                        c('v2_Rx1_spearman_cor','v3_era_Rx1_spearman_cor',
+                                          'v3_imerg_Rx1_spearman_cor'),
+                                        'Rx1day',paste0("Spearman’s rank correlation (","\u03C1",")"),-1,1,.5,1,
+                                        regions)
+
+sp_Rx5 <-   performance_plot_ext_indices(res_ext_ind_df,
+                                        c('v2_Rx5_spearman_cor','v3_era_Rx5_spearman_cor',
+                                          'v3_imerg_Rx5_spearman_cor'),
+                                        'Rx5day','',-1,1,.5,1,
+                                        regions)
+
+sp_SDII <-   performance_plot_ext_indices(res_ext_ind_df,
+                                         c('v2_SDII_spearman_cor','v3_era_SDII_spearman_cor',
+                                           'v3_imerg_SDII_spearman_cor'),
+                                         'SDII','',-1,1,.5,1,
+                                         regions)
+
+
+png(paste0("G:/My Drive/R4C_et_al/3_PLOTS/SUPP_PLOTS/",
+           "Fig_perf_extreme_indices_spearman_correlation_",region_name,".png"),
+    units = "in",width = 13.39, height =6, 
+    res = 600, pointsize = 11)#, bg = "transparent")
+
+ggarrange(sp_rtotal,sp_r95,sp_r99,sp_CDD,sp_CWD,
+          sp_R10mm,sp_R20mm,sp_Rx1,sp_Rx5,sp_SDII,ncol=5,nrow=2,
+          labels = c("a","b","c","d","e","f","g","h","i","j"))
+
+
+dev.off()
+
+
+
+
+
+#___________________________________________________________________
+#  Median percent bias (mBIAS)
+
+regions <- c("Pacifico","Andes","Caribe","Amazonia","Orinoquia","Amazonas")
+region_name <- 'COL'
+
+
+mbias_r95 <-   performance_plot_ext_indices(res_ext_ind_df,
+                                         c('v2_r95_mbias','v3_era_r95_mbias',
+                                           'v3_imerg_r95_mbias'),
+                                         "R95p",'',-100,100,50,0,
+                                         regions)
+
+mbias_r99 <-   performance_plot_ext_indices(res_ext_ind_df,
+                                         c('v2_r99_mbias','v3_era_r99_mbias',
+                                           'v3_imerg_r99_mbias'),
+                                         'R99p',"Median percent bias (mBIAS)",-100,100,50,0,
+                                         regions)
+
+mbias_rtotal <-   performance_plot_ext_indices(res_ext_ind_df,
+                                            c('v2_rtotal_mbias','v3_era_rtotal_mbias',
+                                              'v3_imerg_rtotal_mbias'),
+                                            'PRCPTOT','',-100,100,50,0,
+                                            regions)
+
+mbias_rtotal <- mbias_rtotal + 
+  theme(
+    legend.position = c(0.25, 0.3),  
+    legend.title = element_text(size = 11),
+    legend.text = element_text(size = 10,color='black'))+  
+  guides(fill = guide_legend(ncol = 1)) +
+  #theme_minimal(base_size = 14) +
+  theme(#legend.position = 'top', 
+    legend.spacing.x = unit(.01, 'cm'),
+    legend.background = element_rect(fill = NA, color = NA))
+mbias_rtotal
+
+
+mbias_CDD <-   performance_plot_ext_indices(res_ext_ind_df,
+                                         c('v2_CDD_mbias','v3_era_CDD_mbias',
+                                           'v3_imerg_CDD_mbias'),
+                                         'CDD','',-100,100,50,0,
+                                         regions)
+
+mbias_CWD <-   performance_plot_ext_indices(res_ext_ind_df,
+                                         c('v2_CWD_mbias','v3_era_CWD_mbias',
+                                           'v3_imerg_CWD_mbias'),
+                                         'CWD','',-100,400,100,0,
+                                         regions)
+
+
+mbias_R10mm <-   performance_plot_ext_indices(res_ext_ind_df,
+                                           c('v2_R10mm_mbias','v3_era_R10mm_mbias',
+                                             'v3_imerg_R10mm_mbias'),
+                                           'R10mm','',-100,100,50,0,
+                                           regions)
+
+mbias_R20mm <-   performance_plot_ext_indices(res_ext_ind_df,
+                                           c('v2_R20mm_mbias','v3_era_R20mm_mbias',
+                                             'v3_imerg_R20mm_mbias'),
+                                           'R20mm','',-100,100,50,0,
+                                           regions)
+
+
+mbias_Rx1 <-   performance_plot_ext_indices(res_ext_ind_df,
+                                         c('v2_Rx1_mbias','v3_era_Rx1_mbias',
+                                           'v3_imerg_Rx1_mbias'),
+                                         'Rx1day',"Median percent bias (mBIAS)",-100,100,50,0,
+                                         regions)
+
+mbias_Rx5 <-   performance_plot_ext_indices(res_ext_ind_df,
+                                         c('v2_Rx5_mbias','v3_era_Rx5_mbias',
+                                           'v3_imerg_Rx5_mbias'),
+                                         'Rx5day','',-100,100,50,0,
+                                         regions)
+
+mbias_SDII <-   performance_plot_ext_indices(res_ext_ind_df,
+                                          c('v2_SDII_mbias','v3_era_SDII_mbias',
+                                            'v3_imerg_SDII_mbias'),
+                                          'SDII','',-100,100,50,0,
+                                          regions)
+
+
+png(paste0("G:/My Drive/R4C_et_al/3_PLOTS/SUPP_PLOTS/",
+           "Fig_perf_extreme_indices_median_bias_",region_name,".png"),
+    units = "in",width = 13.39, height =6, 
+    res = 600, pointsize = 11)#, bg = "transparent")
+
+ggarrange(mbias_rtotal,mbias_r95,mbias_r99,mbias_CDD,mbias_CWD,
+          mbias_R10mm,mbias_R20mm,mbias_Rx1,mbias_Rx5,mbias_SDII,ncol=5,nrow=2,
+          labels = c("a","b","c","d","e","f","g","h","i","j"))
+
+dev.off()
+
+
+##=============================================================================
+
+#//////////////////////////////////////////////////
+# directories and data
+dir_plots           <- "G:/My Drive/R4C_et_al/3_PLOTS"
+dir_plots_supp      <- 'G:/My Drive/R4C_et_al/3_PLOTS/SUPP_PLOTS'
+dir_IDEAM_GPPs      <- "G:/My Drive/R4C_et_al/4_IDEAM_GPPs"
+
+countries  <- ne_countries(type = "countries",scale = "medium")[1]
+colombia <- countries[countries$name == "Colombia", ]
+nat_reg_shp <- st_read("G:/My Drive/05_Papers/ValenciaEtAl-SRE/GIS/shp_regiones_naturales_colombia.shp")
+
+
+
+col_pal <- (c('#543005','#8c510a','#bf812d','#dfc27d','#f6e8c3',
+              '#c7eae5','#80cdc1','#35978f','#01665e','#003c30'))
+
+col_pal2 <- rev(c("#67001f","#b2182b","#d6604d","#f4a582","#f7f7f7",
+                  "#92c5de","#4393c3","#2166ac","#053061"))
+
+plot_extreme_map_function <- function(dataset,var,title,legend_title){
+  
+  dataset <- dataset %>% select(latitude, longitude, var_perf = !!sym(var))
+
+  plot <- ggplot() +
+    geom_sf(data = nat_reg_shp, color = adjustcolor("black", alpha.f = 0.7),
+            fill = NA, size = 0.01)+
+    geom_point(
+      data = dataset,
+      aes(x = longitude, y = latitude,
+          color = pmax(pmin(var_perf, 100), -100)),size=.7) +
+    scale_color_stepsn(
+      name = legend_title,
+      colors = col_pal2,
+      limits = c(-100, 100),
+      breaks = seq(-100, 100, by = 25),
+      guide = guide_colorbar(
+        title.position = "top", 
+        label.position = "bottom",
+        direction = "horizontal",
+        barheight = unit(0.4, "cm"),
+        barwidth = unit(12, "cm"))) +
+    scale_x_continuous(breaks = seq(-80, -66, by = 3)) +
+    scale_y_continuous(breaks = seq(-4, 12, by = 4),
+                       labels = c("-4°S","0°", "4°N", "8°N","12°N")) +
+    coord_sf(xlim = c(-80, -66), ylim = c(-5, 13), expand = FALSE) +
+    theme_void() +
+    theme(
+      plot.margin = unit(c(0.0, 0.0, 0.0, 0.0), "cm"),
+      plot.title = element_text(size = 16, face = "bold", hjust = 0.5),
+      legend.title = element_text(size = 12, face = "bold", vjust = 0, hjust = 0.5),
+      legend.text = element_text(size = 11),
+      axis.text.x = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks = element_blank(),
+      axis.text = element_text(size = 12, color = 'black'),
+      legend.position = "bottom",
+      legend.title.align = 1,
+      legend.box.spacing = unit(0, "pt")) +
+    labs(x = "", y = "", title = title)
+  
+  return(plot)}
+
+
+v3_era_cwd <- plot_extreme_map_function(res_ext_ind_df,
+                        'v3_era_CWD_mbias','','Median percent bias (mBIAS)')
+
+v3_imerg_cwd <- plot_extreme_map_function(res_ext_ind_df,
+                        'v3_imerg_CWD_mbias','','Median percent bias (mBIAS)')
+
+v2_cwd <- plot_extreme_map_function(res_ext_ind_df,
+                        'v2_CWD_mbias','','Median percent bias (mBIAS)')
+
+
+v3_era_cdd <- plot_extreme_map_function(res_ext_ind_df,
+                  'v3_era_CDD_mbias','CHIRPSv3-ERA5','Median percent bias (mBIAS)')
+
+v3_imerg_cdd <- plot_extreme_map_function(res_ext_ind_df,
+                  'v3_imerg_CDD_mbias','CHIRPSv3-IMERG','Median percent bias (mBIAS)')
+
+v2_cdd <- plot_extreme_map_function(res_ext_ind_df,
+                 'v2_CDD_mbias','CHIRPSv2','Median percent bias (mBIAS)')
+
+
+v3_era_rx1 <- plot_extreme_map_function(res_ext_ind_df,
+                                        'v3_era_Rx1_mbias','','Median percent bias (mBIAS)')
+
+v3_imerg_rx1 <- plot_extreme_map_function(res_ext_ind_df,
+                                          'v3_imerg_Rx1_mbias','','Median percent bias (mBIAS)')
+
+v2_rx1 <- plot_extreme_map_function(res_ext_ind_df,
+                                    'v2_Rx1_mbias','','Median percent bias (mBIAS)')
+
+
+
+v3_era_sdii <- plot_extreme_map_function(res_ext_ind_df,
+                  'v3_era_SDII_mbias','','Median percent bias (mBIAS)')
+
+v3_imerg_sdii <- plot_extreme_map_function(res_ext_ind_df,
+                  'v3_imerg_SDII_mbias','','Median percent bias (mBIAS)')
+
+v2_sdii <- plot_extreme_map_function(res_ext_ind_df,
+                 'v2_SDII_mbias','','Median percent bias (mBIAS)')
+
+
+v3_era_r20mm <- plot_extreme_map_function(res_ext_ind_df,
+                                 'v3_era_R20mm_mbias','CHIRPSv3-ERA5 - R20mm','Median percent bias (mBIAS)')
+
+v3_imerg_r20mm <- plot_extreme_map_function(res_ext_ind_df,
+                                  'v3_imerg_R20mm_mbias','CHIRPSv3-IMERG - R20mm','Median percent bias (mBIAS)')
+
+v2_r20mm <- plot_extreme_map_function(res_ext_ind_df,
+                                     'v2_R20mm_mbias','','Median percent bias (mBIAS)')
+
+
+
+png(paste0("G:/My Drive/R4C_et_al/3_PLOTS/SUPP_PLOTS/",
+           "Fig_perf_extreme_indices_median_bias_map.png"),
+    units = "in",width = 7, height =10, 
+    res = 600, pointsize = 11)#, bg = "transparent")
+
+p <- ggarrange(v2_cdd,v3_imerg_cdd,v3_era_cdd,
+          v2_cwd,v3_imerg_cwd,v3_era_cwd,
+          v2_rx1,v3_imerg_rx1,v3_era_rx1,
+          v2_sdii,v3_imerg_sdii,v3_era_sdii,
+          ncol=3,nrow=4,common.legend = TRUE,legend='bottom')
+
+p1 <- p +   theme(
+  plot.margin = unit(c(.01, .6, .01, .01), "cm"))+ 
+  draw_plot_label(
+    label = c("   Consecutive \n dry days (CDD)", 
+              "   Consecutive \n wet days (CWD)",
+              "Max 1-day precipitation    \n         amount (Rx1day)",
+              "        Simple daily \n intensity index (SDII)"),
+    size = 14,
+    x = c(.93),  # Move the labels outside to the right
+    y = c(0.75, 0.5, 0.2,.0),  # Adjust y position for each label
+    #y = c(0.83, 0.57, 0.315,0.08),  # Adjust y position for each label
+    angle = 90)
+
+print(p1)
+dev.off()
+
 
 
 

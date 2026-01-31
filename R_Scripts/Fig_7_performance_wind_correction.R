@@ -275,15 +275,17 @@ map_kge_plot <- wind_plot_map_function(res_pentad_data,
 # Save plots
 
 blank_plot <- ggplot() + theme_void()
-#png(paste0(dir_plots ,"/", "Fig_7_performance_wind_correction.png"), units = "in",
-#    width = 9.5, height = 3.2, res = 600, pointsize = 11)
-pdf(paste0(dir_plots, "/", "Fig_7_performance_wind_correction.pdf"),
-    width = 9.5, height = 3.2, pointsize = 11)
+png(paste0(dir_plots ,"/", "Fig_7_performance_wind_correction.png"), units = "in",
+    width = 9.5, height = 3.2, res = 600, pointsize = 11)
+#pdf(paste0(dir_plots, "/", "Fig_7_performance_wind_correction.pdf"),
+#    width = 9.5, height = 3.2, pointsize = 11)
 
 ggarrange(r_plot,B_plot,G_plot,kge_plot,
           ncol=4,nrow=1,labels = c("a", "b","c",'d'),
           label.x = c(0.24,-0.06,-0.05,-0.05,0.05),widths = c(10.5,8,8,8,8))
 dev.off()
+
+
 
 
 png(paste0(dir_plots ,"/SUPP_PLOTS/",
@@ -296,5 +298,70 @@ ggarrange(map_r_plot,map_B_plot,map_G_plot,map_kge_plot,
           common.legend=TRUE,legend='bottom')
 
 dev.off()
+
+
+
+
+res_data <- res_daily_data
+
+# Wilcoxon test
+wilcox.test(
+  res_data$r_chirps_v3_imerg_scale,
+  res_data$r_chirps_v3_imerg,
+  paired = TRUE,
+  alternative = "two.sided")
+
+wilcox.test(
+  res_data$B_chirps_v3_imerg_scale,
+  res_data$B_chirps_v3_imerg,
+  paired = TRUE,
+  alternative = "two.sided")
+
+wilcox.test(
+  res_data$G_chirps_v3_imerg_scale,
+  res_data$G_chirps_v3_imerg,
+  paired = TRUE,
+  alternative = "two.sided")
+
+wilcox.test(
+  res_data$kge_chirps_v3_imerg_scale,
+  res_data$kge_chirps_v3_imerg,
+  paired = TRUE,
+  alternative = "two.sided")
+
+
+
+#===================================
+
+res_data <- res_month_data
+
+# Wilcoxon test
+wilcox.test(
+  res_data$r_chirps_v3_scale,
+  res_data$r_chirps_v3,
+  paired = TRUE,
+  alternative = "two.sided")
+
+wilcox.test(
+  res_data$B_chirps_v3_scale,
+  res_data$B_chirps_v3,
+  paired = TRUE,
+  alternative = "two.sided")
+
+wilcox.test(
+  res_data$G_chirps_v3_scale,
+  res_data$G_chirps_v3,
+  paired = TRUE,
+  alternative = "two.sided")
+
+wilcox.test(
+  res_data$kge_chirps_v3_scale,
+  res_data$kge_chirps_v3,
+  paired = TRUE,
+  alternative = "two.sided")
+
+
+
+boxplot(res_data$kge_chirps_v3_scale - res_data$kge_chirps_v3)
 
 

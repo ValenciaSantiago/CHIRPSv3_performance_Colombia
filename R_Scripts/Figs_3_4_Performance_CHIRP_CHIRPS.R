@@ -1431,11 +1431,7 @@ kge_day_2001 <- kge_day_2001 + scale_y_continuous(
 #///////////////////////////////////////////////////////////////////////////////
 # Categorical indices
 cat_daily_df <- as.data.frame(fread(paste0("G:/My Drive/R4C_et_al/4_IDEAM_GPPs/" ,
-                "/res_performance_daily_categorical_indices_2001_2023_df.csv"),head=TRUE))
-cat_daily_scale_df <- as.data.frame(fread(paste0("G:/My Drive/R4C_et_al/4_IDEAM_GPPs/" ,
-                "/res_performance_daily_categorical_indices_2001_2023_df_scale.csv"),head=TRUE))
-
-
+                "/res_performance_daily_categorical_indices_2001_2023_df_v2.csv"),head=TRUE))
 
 pcp_int_freq_df <- data.frame(intensity=c(1,2,3,4,5),
                               freq = c(.2,.4,.1,.1,.2))
@@ -1567,36 +1563,39 @@ POD_plot   <- cat_ind_plot(cat_daily_df,data_daily_na,"POD",0,1,.25,"Probability
 ETS_plot   <- cat_ind_plot(cat_daily_df,data_daily_na,"ETS",0,1,.25,"Equitable threat score (ETS)",1,"",.01)
 FAR_plot   <- cat_ind_plot(cat_daily_df,data_daily_na,"FAR",0,1,.25,"False alarm ratio (FAR)",0,"",.01)
 fBIAS_plot <- cat_ind_plot(cat_daily_df,data_daily_na,"fBIAS",0,3,.5,"Frequency bias (fBIAS)",1,"Events frequency",12)
+HK_plot    <- cat_ind_plot(cat_daily_df,data_daily_na,"HK_",0,1,.25,"Hansen-Kuipers discriminant (HK)",1,"",.01)
 
 
 #///////////////////////////////////////////////////
 png(paste("G:/My Drive/R4C_et_al/3_PLOTS", "Fig_performance_daily.png",
           sep = '/'), units = "in",width = 14, height =5.5, res = 600, pointsize = 11)#, bg = "transparent")
 
-B_day_2001 <- B_day_2001 + theme(legend.position = "none")
-G_day_2001 <- G_day_2001 + theme(legend.position = "none")
+B_day_2001   <- B_day_2001 + theme(legend.position = "none")
+G_day_2001   <- G_day_2001 + theme(legend.position = "none")
 kge_day_2001 <- kge_day_2001 + theme(legend.position = "none")
 
 fBIAS_plot <- fBIAS_plot + theme(legend.position = "none")
-ETS_plot <- ETS_plot+ theme(legend.position = "none")
-FAR_plot <- FAR_plot + theme(legend.position = "none")
+ETS_plot   <- ETS_plot+ theme(legend.position = "none")
+FAR_plot   <- FAR_plot + theme(legend.position = "none")
+HK_plot    <- HK_plot+ theme(legend.position = "none")
 
 # Modify the labels' position to the right
-r_day_2001 <- r_day_2001 + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
-POD_plot <- POD_plot + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
-B_day_2001 <- B_day_2001 + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
-FAR_plot <- FAR_plot + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
-G_day_2001 <- G_day_2001 + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
-ETS_plot <- ETS_plot + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
+r_day_2001   <- r_day_2001 + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
+POD_plot     <- POD_plot + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
+B_day_2001   <- B_day_2001 + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
+FAR_plot     <- FAR_plot + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
+G_day_2001   <- G_day_2001 + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
+ETS_plot     <- ETS_plot + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
 kge_day_2001 <- kge_day_2001 + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
-fBIAS_plot <- fBIAS_plot + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
+fBIAS_plot   <- fBIAS_plot + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
+HK_plot      <- HK_plot + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
 
 
 ggarrange(ggarrange(r_day_2001,POD_plot,ncol = 1, nrow = 2, align = "v",
                     labels = c("a", "e"),label.x = 0.05),
           ggarrange(B_day_2001,FAR_plot,ncol = 1, nrow = 2, align = "v",
                     labels = c("b", "f"),label.x = 0.05),
-          ggarrange(G_day_2001,ETS_plot,ncol = 1, nrow = 2, align = "v",
+          ggarrange(G_day_2001,HK_plot,ncol = 1, nrow = 2, align = "v",
                     labels = c("c", "g"),label.x = 0.05),
           ggarrange(kge_day_2001,fBIAS_plot,ncol = 1, nrow = 2, align = "v",
                     labels = c("d", "h"),label.x = 0.05),
@@ -1609,6 +1608,9 @@ dev.off()
 
 
 #___________________________________________________________
+
+cat_daily_scale_df <- as.data.frame(fread(paste0("G:/My Drive/R4C_et_al/4_IDEAM_GPPs/" ,
+                "/res_performance_daily_categorical_indices_2001_2023_df_scale_v2.csv"),head=TRUE))
 
 
 # Wind-corrected and Uncorrected plot function
@@ -1625,8 +1627,7 @@ cat_ind_plot_correction <- function(data_df_cor, data_df_uncor, daily_data, var,
   
   bar_data <- data.frame(
     intensity = 1:5,
-    count = c(freq_int_1, freq_int_2, freq_int_3, freq_int_4, freq_int_5)
-  ) %>%
+    count = c(freq_int_1, freq_int_2, freq_int_3, freq_int_4, freq_int_5)) %>%
     mutate(scaled_count = count / max(count) * (y_max - y_min) + y_min)
   
   # === 2. Gather metrics ===
@@ -1635,7 +1636,6 @@ cat_ind_plot_correction <- function(data_df_cor, data_df_uncor, daily_data, var,
   
   metrics_columns <- unlist(lapply(categories, function(cat) paste0(var, cat, "_i", 1:5)))
   metrics_columns2 <- unlist(lapply(categories2, function(cat) paste0(var, cat, "_i", 1:5)))
-  
   
   metrics_data     <- data_df_uncor[, metrics_columns]
   metrics_data_cor <- data_df_cor[, metrics_columns2]
@@ -1646,8 +1646,7 @@ cat_ind_plot_correction <- function(data_df_cor, data_df_uncor, daily_data, var,
       mutate(
         metric    = gsub("v[0-9]+_i[1-5]", "", category_intensity),
         category  = gsub("_i[1-5]", "", category_intensity),
-        intensity = as.integer(gsub(".*_i([1-5])", "\\1", category_intensity))
-      )
+        intensity = as.integer(gsub(".*_i([1-5])", "\\1", category_intensity)))
   }
   
   metrics_long     <- long_data(metrics_data)     %>% mutate(cor = "Uncorrected")
@@ -1742,8 +1741,11 @@ FAR_plot_s   <- cat_ind_plot_correction(cat_daily_scale_df,cat_daily_df,data_dai
                                         "FAR",0,1,.25,"False alarm ratio (FAR)",0,
                                         "Events frequency",12)
 fBIAS_plot_s <- cat_ind_plot_correction(cat_daily_scale_df,cat_daily_df,data_daily_na,
-                                        "fBIAS",0,3,.5,"Frequency bias (fBIAS)",1,"Events frequency",12)
-
+                                        "fBIAS",0,3,.5,"Frequency bias (fBIAS)",1,
+                                        "Events frequency",12)
+HK_plot_s   <- cat_ind_plot_correction(cat_daily_scale_df,cat_daily_df,data_daily_na,
+                                        "HK",0,1,.25,"Hansen-Kuipers discrimination (HK)",1,
+                                        "",.012)
 
 png(paste("G:/My Drive/R4C_et_al/3_PLOTS/SUPP_PLOTS",
           "Fig_performance_daily_wind_correction.png",sep = '/'),
@@ -1751,18 +1753,21 @@ png(paste("G:/My Drive/R4C_et_al/3_PLOTS/SUPP_PLOTS",
 
 
 fBIAS_plot <- fBIAS_plot_s + theme(legend.position = "none")
-ETS_plot  <- ETS_plot_s + theme(legend.position = "none")
-FAR_plot  <- FAR_plot_s + theme(legend.position = "none")
+ETS_plot   <- ETS_plot_s + theme(legend.position = "none")
+FAR_plot   <- FAR_plot_s + theme(legend.position = "none")
+HK_plot    <- HK_plot_s + theme(legend.position = "none")
+
 
 # Modify the labels' position to the right
 POD_plot <- POD_plot_s + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
 FAR_plot <- FAR_plot + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
-ETS_plot <- ETS_plot + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
+HK_plot  <- HK_plot + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
 fBIAS_plot <- fBIAS_plot + theme(plot.margin = margin(10, 10, 0, 0))  # Increase right margin
 
-ggarrange(POD_plot,FAR_plot,ETS_plot,fBIAS_plot,
+ggarrange(POD_plot,FAR_plot,HK_plot,fBIAS_plot,
           ncol = 2, nrow = 2, align = "hv",
           labels = c("", "","",""),label.x = 0.)
+
 dev.off()
 
 
@@ -1894,12 +1899,12 @@ cat_ind_plot_seasons <- function(data_df,daily_data,var,y_min,
 
 
 cat_daily_dry_season_df <- as.data.frame(fread(paste0("G:/My Drive/R4C_et_al/4_IDEAM_GPPs/" ,
-                      "/res_performance_daily_categorical_indices_2001_2023_dry_season_df.csv"),head=TRUE))
+                      "/res_performance_daily_categorical_indices_2001_2023_dry_season_df_v2.csv"),head=TRUE))
 cat_daily_wet_season_df <- as.data.frame(fread(paste0("G:/My Drive/R4C_et_al/4_IDEAM_GPPs/" ,
-                      "/res_performance_daily_categorical_indices_2001_2023_wet_season_df.csv"),head=TRUE))
+                      "/res_performance_daily_categorical_indices_2001_2023_wet_season_df_v2.csv"),head=TRUE))
 
-cat_daily_dry_season_df <- filter(cat_daily_dry_season_df,nat_region=='Orinoquia')
-cat_daily_wet_season_df <- filter(cat_daily_wet_season_df,nat_region=='Orinoquia')
+#cat_daily_dry_season_df <- filter(cat_daily_dry_season_df,nat_region=='Orinoquia')
+#cat_daily_wet_season_df <- filter(cat_daily_wet_season_df,nat_region=='Orinoquia')
 POD_plot_dry   <- cat_ind_plot_seasons(cat_daily_dry_season_df,data_daily_na,"POD",
                            0,1,.25,"Probability of detection (POD)",1,"",.01)
 ETS_plot_dry   <- cat_ind_plot_seasons(cat_daily_dry_season_df,data_daily_na,"ETS",
@@ -1908,6 +1913,9 @@ FAR_plot_dry   <- cat_ind_plot_seasons(cat_daily_dry_season_df,data_daily_na,"FA
                            0,1,.25,"False alarm ratio (FAR)",0,"",.01)
 fBIAS_plot_dry <- cat_ind_plot_seasons(cat_daily_dry_season_df,data_daily_na,"fBIAS",
                            0,5,1,"Frequency bias (fBIAS)",1,"Events frequency",12)
+HK_plot_dry   <- cat_ind_plot_seasons(cat_daily_dry_season_df,data_daily_na,"HK_",
+                                       0,1,.25,"Hansen-Kuipers discriminant (HK)",1,"",.01)
+
 
 
 POD_plot_wet   <- cat_ind_plot_seasons(cat_daily_wet_season_df,data_daily_na,"POD",
@@ -1918,6 +1926,10 @@ FAR_plot_wet   <- cat_ind_plot_seasons(cat_daily_wet_season_df,data_daily_na,"FA
                           0,1,.25,"False alarm ratio (FAR)",0,"",.01)
 fBIAS_plot_wet <- cat_ind_plot_seasons(cat_daily_wet_season_df,data_daily_na,"fBIAS",
                           0,4,1,"Frequency bias (fBIAS)",1,"Events frequency",12)
+HK_plot_wet   <- cat_ind_plot_seasons(cat_daily_wet_season_df,data_daily_na,"HK_",
+                                      0,1,.25,"Hansen-Kuipers discriminant (HK)",1,"",.01)
+
+
 
 POD_plot_wet <- POD_plot_wet + theme(legend.position = "none") +
                    theme(plot.margin = margin(10, 10, 0, 0))
@@ -1926,6 +1938,10 @@ POD_plot_dry <- POD_plot_dry + #theme(legend.position = "none") +
 ETS_plot_wet <- ETS_plot_wet + theme(legend.position = "none") +
                        theme(plot.margin = margin(10, 10, 0, 0))
 ETS_plot_dry <- ETS_plot_dry + theme(legend.position = "none") +
+                       theme(plot.margin = margin(10, 10, 0, 0))
+HK_plot_wet  <- HK_plot_wet + theme(legend.position = "none") +
+                       theme(plot.margin = margin(10, 10, 0, 0))
+HK_plot_dry  <- HK_plot_dry + theme(legend.position = "none") +
                        theme(plot.margin = margin(10, 10, 0, 0))
 FAR_plot_wet <- FAR_plot_wet + theme(legend.position = "none") +
                            theme(plot.margin = margin(10, 10, 0, 0))
@@ -1938,20 +1954,20 @@ fBIAS_plot_dry <- fBIAS_plot_dry + theme(legend.position = "none") +
 
 
 dir_plots_supp      <- 'G:/My Drive/R4C_et_al/3_PLOTS/SUPP_PLOTS'
-png(paste(dir_plots_supp, "Fig_cat_ind_daily_dry_wet_season_Orinoquia.png",
-          sep = '/'), units = "in",width =12, height = 5.5, 
+png(paste(dir_plots_supp, "Fig_cat_ind_daily_dry_wet_season.png",
+          sep = '/'), units = "in",width =13.5, height = 5.5, 
     res = 600, pointsize = 11)#, bg = "transparent")
 
 
-p <- ggarrange(POD_plot_dry,FAR_plot_dry,ETS_plot_dry,fBIAS_plot_dry,
-          POD_plot_wet,FAR_plot_wet,ETS_plot_wet,fBIAS_plot_wet,
+p <- ggarrange(POD_plot_dry,FAR_plot_dry,HK_plot_dry,fBIAS_plot_dry,
+          POD_plot_wet,FAR_plot_wet,HK_plot_wet,fBIAS_plot_wet,
           ncol=4,nrow=2,widths = c(3.2,3.2,3.2,3.0),
           label.x=c(0.05,0.05,0.05,0),label.y=0.98,
           labels=c('a','b','c','d','e','f','g','h'))
 
 p <- p +   theme(plot.margin = unit(c(.01, .5, .01, .01), "cm"))+ 
             draw_plot_label(label = c("Dry season","Wet season"),
-              size = 14,x = c(.99),  y = c(0.64, 0.14),  angle = 90)  
+              size = 14,x = c(.99),  y = c(0.64, 0.13),  angle = 90)  
 print(p)
 
 dev.off()
