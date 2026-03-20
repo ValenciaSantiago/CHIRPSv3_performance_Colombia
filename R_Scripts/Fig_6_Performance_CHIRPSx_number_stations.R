@@ -301,6 +301,324 @@ kge_periods <- kge_periods + scale_y_continuous(
 
 
 
+#______________________________________________________________________
+
+#res_month_data_p1,res_month_data_p2
+function_plot_periods <- function(dataset1,dataset2,names,x_label,r_low,h_low,int,opt_value){
+  
+  res_month_data_p1_subset <- dataset1 %>% select(all_of(c(names)))
+  res_month_data_p2_subset <- dataset2 %>% select(all_of(c(names)))
+  head(res_month_data_p1_subset)
+  
+  colnames(res_month_data_p1_subset ) <- c("CHIRPSv2","CHIRPSv3")
+  colnames(res_month_data_p2_subset ) <- c("CHIRPSv2","CHIRPSv3")
+  
+  
+  # Combine the two periods into one data frame for plotting
+  df_var <- bind_rows(
+    # res_month_data_p1_subset %>%
+    # transmute(
+    #   period = "2001-2011",
+    #   var = CHIRPv2,
+    #   product = "CHIRPv2"
+    #   ),
+    # res_month_data_p1_subset %>%
+    #   transmute(
+    #    period = "2001-2011",
+    #    var = CHIRPv3,
+    ##    product = "CHIRPv3"
+    #  ),
+    res_month_data_p1_subset %>%
+      transmute(
+        period = "2001-2011",
+        var = CHIRPSv2,
+        product = "CHIRPSv2"
+      ),
+    res_month_data_p1_subset %>%
+      transmute(
+        period = "2001-2011",
+        var = CHIRPSv3,
+        product = "CHIRPSv3"
+      ),
+    # res_month_data_p2_subset %>%
+    #   transmute(
+    #     period = "2012-2023",
+    #     var = CHIRPv2,
+    #     product = "CHIRPv2"
+    #  ),
+    #res_month_data_p2_subset %>%
+    #  transmute(
+    #    period = "2012-2023",
+    #   var= CHIRPv3,
+    #   product = "CHIRPv3"
+    #  ),
+    res_month_data_p2_subset %>%
+      transmute(
+        period = "2012-2023",
+        var = CHIRPSv2,
+        product = "CHIRPSv2"
+      ),
+    res_month_data_p2_subset %>%
+      transmute(
+        period = "2012-2023",
+        var= CHIRPSv3,
+        product = "CHIRPSv3"
+      )
+  )
+  
+  df_var$product <- factor(df_var$product, levels = c("CHIRPSv2", "CHIRPSv3"))
+  
+  plot_violin <- ggplot(df_var, aes(y = var, x = product, fill = period)) + 
+    geom_hline(yintercept = opt_value, linetype = "dashed", color = "darkgrey", size = .5) +
+    geom_flat_violin(
+      position = position_nudge(x = .35, y = 0), 
+      alpha = 0.5, 
+      trim = TRUE,
+      stat = "ydensity",
+      scale = "area",
+      color = NA
+    ) +
+    coord_flip() + 
+    geom_boxplot(
+      width = .25, 
+      outlier.shape = NA, 
+      color = "black",
+      position = position_dodge(.5)
+    ) + 
+    scale_fill_manual(
+      name = "Period",
+      values = c(
+        "2001-2011" = adjustcolor('#BA0C2FFF', alpha.f = 0.6),
+        "2012-2023" = adjustcolor('#333F48FF', alpha.f = 0.6)
+      )
+    ) +
+    stat_summary(
+      fun = median, 
+      geom = "text", 
+      aes(label = round(..y.., 2)), 
+      position = position_dodge(1.1), 
+      colour = "black", 
+      size = 2.8, 
+      vjust = 0.45
+    ) +
+    scale_y_continuous(
+      limits = c(r_low, h_low),
+      breaks = seq(r_low, h_low, by = int),
+      labels = seq(r_low, h_low, by = int)
+    ) +
+    xlab('') +
+    ylab(x_label) +
+    theme_classic() +  # Apply base theme
+    theme(
+      plot.margin = unit(c(.2, .2, .2, .2), "cm"),
+      plot.title = element_text(size = 10, color = 'black'),
+      axis.title.y = element_text(size = 12, vjust = 0.5, color = 'black'),
+      axis.title.x = element_text(size = 12, color = 'black'),
+      axis.text = element_text(size = 12, color = 'black'),
+      legend.title = element_text(size = 16, vjust = 0.0, hjust = 0.5, color = 'black'),
+      legend.text = element_text(size = 14, color = 'black'),
+      legend.position = "none",
+      legend.title.align = 1,
+      legend.box.spacing = unit(-.001, "pt"), 
+      legend.margin = margin(.001, 0.03, 0., 0.0025),
+      legend.box.margin = margin(0, 0, 0, 0))
+  return(plot_violin)
+}
+
+
+#_______________________________________________________________________
+# Monthly scale
+
+function_plot_periods_s <- function(dataset1,dataset2,names,x_label,r_low,h_low,int,opt_value){
+  
+  res_month_data_p1_subset <- dataset1 %>% select(all_of(c(names)))
+  res_month_data_p2_subset <- dataset2 %>% select(all_of(c(names)))
+  head(res_month_data_p1_subset)
+  
+  colnames(res_month_data_p1_subset ) <- c("CHIRPSv2","CHIRPSv3")
+  colnames(res_month_data_p2_subset ) <- c("CHIRPSv2","CHIRPSv3")
+  
+  
+  # Combine the two periods into one data frame for plotting
+  df_var <- bind_rows(
+    # res_month_data_p1_subset %>%
+    # transmute(
+    #   period = "2001-2011",
+    #   var = CHIRPv2,
+    #   product = "CHIRPv2"
+    #   ),
+    # res_month_data_p1_subset %>%
+    #   transmute(
+    #    period = "2001-2011",
+    #    var = CHIRPv3,
+    ##    product = "CHIRPv3"
+    #  ),
+    res_month_data_p1_subset %>%
+      transmute(
+        period = "2001-2011",
+        var = CHIRPSv2,
+        product = "CHIRPv2"
+      ),
+    res_month_data_p1_subset %>%
+      transmute(
+        period = "2001-2011",
+        var = CHIRPSv3,
+        product = "CHIRPv3"
+      ),
+    # res_month_data_p2_subset %>%
+    #   transmute(
+    #     period = "2012-2023",
+    #     var = CHIRPv2,
+    #     product = "CHIRPv2"
+    #  ),
+    #res_month_data_p2_subset %>%
+    #  transmute(
+    #    period = "2012-2023",
+    #   var= CHIRPv3,
+    #   product = "CHIRPv3"
+    #  ),
+    res_month_data_p2_subset %>%
+      transmute(
+        period = "2012-2023",
+        var = CHIRPSv2,
+        product = "CHIRPv2"
+      ),
+    res_month_data_p2_subset %>%
+      transmute(
+        period = "2012-2023",
+        var= CHIRPSv3,
+        product = "CHIRPv3"
+      )
+  )
+  
+  df_var$product <- factor(df_var$product, levels = c("CHIRPv2", "CHIRPv3"))
+  
+  plot_violin <- ggplot(df_var, aes(y = var, x = product, fill = period)) + 
+    geom_hline(yintercept = opt_value, linetype = "dashed", color = "darkgrey", size = .5) +
+    geom_flat_violin(
+      position = position_nudge(x = .35, y = 0), 
+      alpha = 0.5, 
+      trim = TRUE,
+      stat = "ydensity",
+      scale = "area",
+      color = NA
+    ) +
+    coord_flip() + 
+    geom_boxplot(
+      width = .25, 
+      outlier.shape = NA, 
+      color = "black",
+      position = position_dodge(.5)
+    ) + 
+    scale_fill_manual(
+      name = "Period",
+      values = c(
+        "2001-2011" = adjustcolor('#BA0C2FFF', alpha.f = 0.6),
+        "2012-2023" = adjustcolor('#333F48FF', alpha.f = 0.6)
+      )
+    ) +
+    stat_summary(
+      fun = median, 
+      geom = "text", 
+      aes(label = round(..y.., 2)), 
+      position = position_dodge(1.1), 
+      colour = "black", 
+      size = 2.8, 
+      vjust = 0.45
+    ) +
+    scale_y_continuous(
+      limits = c(r_low, h_low),
+      breaks = seq(r_low, h_low, by = int),
+      labels = seq(r_low, h_low, by = int)
+    ) +
+    xlab('') +
+    ylab(x_label) +
+    theme_classic() +  # Apply base theme
+    theme(
+      plot.margin = unit(c(.2, .2, .2, .2), "cm"),
+      plot.title = element_text(size = 10, color = 'black'),
+      axis.title.y = element_text(size = 12, vjust = 0.5, color = 'black'),
+      axis.title.x = element_text(size = 12, color = 'black'),
+      axis.text = element_text(size = 12, color = 'black'),
+      legend.title = element_text(size = 16, vjust = 0.0, hjust = 0.5, color = 'black'),
+      legend.text = element_text(size = 14, color = 'black'),
+      legend.position = "none",
+      legend.title.align = 1,
+      legend.box.spacing = unit(-.001, "pt"), 
+      legend.margin = margin(.001, 0.03, 0., 0.0025),
+      legend.box.margin = margin(0, 0, 0, 0))
+  return(plot_violin)
+}
+
+r_periods_s <- function_plot_periods_s(res_month_data_p1,res_month_data_p2,
+                                   c(#"r_chirp_v2", 
+                                     "r_chirp_v2",
+                                     #"r_chirp_v3",
+                                     "r_chirp_v3"),
+                                   'Correlation coefficient (r)',-0.75,1,.25,1)
+
+r_periods_s  <- r_periods_s  + 
+  theme(
+    legend.position = c(0.3, 0.75),  
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10))+  
+  guides(fill = guide_legend(ncol = 1)) +
+  #theme_minimal(base_size = 14) +
+  theme(#legend.position = 'top', 
+    legend.spacing.x = unit(.01, 'cm'),
+    legend.background = element_rect(fill = NA, color = NA))
+r_periods_s
+
+
+B_periods_s <- function_plot_periods(res_month_data_p1,res_month_data_p2,
+                                   c(#"B_chirp_v2",
+                                     "B_chirp_v2",
+                                     #"B_chirp_v3",
+                                     "B_chirp_v3"),
+                                   paste0("Bias ratio (","\u03B2",")"),-0,2,.5,1)
+#B_periods <- B_periods + theme(axis.text.y = element_blank(),axis.title.y = element_blank())
+
+
+G_periods_s <- function_plot_periods(res_month_data_p1,res_month_data_p2,
+                                   c(#"G_chirp_v2",
+                                     "G_chirp_v2", 
+                                     #"G_chirp_v3", 
+                                     "G_chirp_v3"),
+                                   paste0("Variability ratio (","\u03B3",")"),-0,1.5,.5,1)
+#G_periods <- G_periods + theme(axis.text.y = element_blank(),axis.title.y = element_blank())
+
+
+kge_periods_s <- function_plot_periods(res_month_data_p1,res_month_data_p2,
+                                     c(#"kge_chirp_v2",
+                                       "kge_chirp_v2",
+                                       #"kge_chirp_v3",
+                                       "kge_chirp_v3"),
+                                     'Kling-Gupta Efficiency (KGE)',-0.75,1,.25,1)
+
+#kge_periods <- kge_periods + theme(axis.text.y = element_blank(),axis.title.y = element_blank())
+
+r_periods1_s<- r_periods_s
+r_periods1_s <- r_periods1_s+ scale_y_continuous(
+  limits = c(-0.75, 1),  # Set numeric limits
+  breaks = c(-0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0),  # Numeric breaks
+  labels = c("", "-0.5", "", "0", "", "0.5", "", "1"))
+
+#r_pentad <- r_pentad + theme(legend.position = "none")
+B_periods_s <- B_periods_s +   theme(legend.position = "none",
+                                 axis.title.y = element_blank(),
+                                 axis.text.y = element_blank())
+G_periods_s <- G_periods_s +   theme(legend.position = "none",
+                                 axis.title.y = element_blank(),
+                                 axis.text.y = element_blank())
+kge_periods <- kge_periods +   theme(legend.position = "none",
+                                     axis.title.y = element_blank(),
+                                     axis.text.y = element_blank())
+kge_periods_s <- kge_periods_s + scale_y_continuous(
+  limits = c(-0.75, 1),  # Set numeric limits
+  breaks = c(-0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0),  # Numeric breaks
+  labels = c("", "-0.5", "", "0", "", "0.5", "", "1"))
+
+
 
 
 #_______________________________________________________________________
@@ -378,14 +696,12 @@ kge_pentad_periods <- kge_pentad_periods + scale_y_continuous(
 #____________________________________________________________________________
 # plot
 
-
 res_long <- res_month_data %>%
-  select(mean_gauges_v2, mean_gauges_v3, kge_chirps_v2, kge_chirps_v3) %>%
+  select(mean_gauges_v2,mean_gauges_v3, matches("^kge_chirpS_(v2|v3)$")) %>%
   pivot_longer(
     cols = everything(),
     names_to = c(".value", "version"),
     names_pattern = "(.*)_(v[23])")
-
 
 res_long$mean_gauges <- round(res_long$mean_gauges,0)
 kge_month_v3_v2 <- ggplot(res_long, aes(x = as.factor(mean_gauges), y = kge_chirps, fill = version)) +
@@ -431,6 +747,66 @@ kge_month_v3_v2 <- kge_month_v3_v2 +
 kge_month_v3_v2
 
 
+## CHIRP
+res_long_s <- res_month_data %>%
+  select(
+    mean_gauges_v2,
+    mean_gauges_v3,
+    matches("kge_chirp_(v2|v3)$")
+  ) %>%
+  pivot_longer(
+    cols = everything(),
+    names_to = c(".value", "version"),
+    names_pattern = "(.*)_(v[23])"
+  )
+
+
+res_long_s$mean_gauges <- round(res_long_s$mean_gauges,0)
+kge_month_v3_v2_s <- ggplot(res_long_s, aes(x = as.factor(mean_gauges), y = kge_chirp, fill = version)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.95, position = position_dodge(width = .85)) +
+  scale_fill_manual(values = c("v2" = "#7a3d8d", "v3" = "#3d8d52"),
+                    labels = c("CHIRPv2", "CHIRPv3")) +
+  labs(
+    x = "Mean number of ground stations by 0.25° pixel",
+    y = "Kling-Gupta \n Efficiency (KGE)",
+    fill = "Version",
+    title = "") +
+  theme_classic() +
+  #geom_hline(yintercept = median(res_month_data$kge_chirps_v2),
+  #           linetype = "dotted", color = "#d95f02", size = .7)+
+  #geom_hline(yintercept = median(res_month_data$kge_chirps_v3),
+  #           linetype = "dashed", color = "#d95f02", size = .7)+ 
+  geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", size = 0.5) +
+  scale_y_continuous(limits = c(0,1)) +
+  theme(
+    plot.title = element_text(size = 13, face = "bold", color = "black"),
+    axis.title = element_text(size = 12, color = "black"),
+    axis.text = element_text(size = 12, color = "black"),
+    legend.title = element_text(size = 12, color = "black"),
+    legend.text = element_text(size = 12, color = "black"),
+    legend.position = c(0.7, 0.3),  # esquina inferior izquierda
+    legend.justification = c("right", "top"))  # asegura que la referencia sea la esquina
+#legend.position = "none")
+
+
+
+kge_month_v3_v2_s <- kge_month_v3_v2_s +
+  theme(
+    legend.position = c(0.95, 1.15),
+    legend.direction = "horizontal",   # ← leyenda horizontal
+    legend.title = element_text(size = 12),
+    legend.text = element_text(size = 10),
+    legend.background = element_rect(fill = NA, color = NA)) +
+  guides(
+    fill = guide_legend(
+      title.position = "left",  # ← título a la izquierda
+      title.hjust = 0.5,
+      nrow = 1  ))                # ← una sola fila (horizontal)
+kge_month_v3_v2_s
+
+
+
+
 
 #png(paste0(dir_plots ,"/", "Fig6_performance_stations_pentad.png"), units = "in",
 #    width = 10, height = 5, res = 600, pointsize = 11)
@@ -447,6 +823,30 @@ p1 <- ggarrange(ggarrange(blank_plot,kge_month_v3_v2,
                           widths = c(.2,10),ncol = 2, nrow = 1, align = "h", 
                           labels = c("","a", "b"),label.x = c(0), label.y = 1.06,hjust = -6, vjust = 3),
                 ggarrange(r_periods11,B_periods,G_periods,kge_periods,
+                          # r_periods,B_periods,G_periods,kge_periods,
+                          ncol = 4, nrow = 1,labels = c("e", "f","g",'h'),
+                          label.x = c(0.27,-0.03,-0.05,-0.05),
+                          align='h',widths = c(10.5,8,8,8)),
+                ncol=1,nrow=2,align='hv',heights=c(3.5,3))
+
+print(p1)
+dev.off()
+
+
+## CHIRP
+png(paste0(dir_plots, "/", "Fig_6_performance_CHIRP_number_stations_monthly_v2.png"),
+    width = 10, height = 5, pointsize = 11,units = "in",res=600)
+#library(grDevices )
+#cairo_pdf(paste0(dir_plots, "/", "Fig_6_performance_CHIRPvx_number_stations_pentad.pdf"),
+#          width = 10, height = 5, pointsize = 11)
+r_periods11_s <- r_periods1_s + theme(plot.margin = unit(c(.02, .0, .05, .0), "cm"))
+kge_month_v3_v2_s <- kge_month_v3_v2_s
+
+blank_plot <- ggplot() + theme_void()
+p1 <- ggarrange(ggarrange(blank_plot,kge_month_v3_v2_s,
+                          widths = c(.2,10),ncol = 2, nrow = 1, align = "h", 
+                          labels = c("","a", "b"),label.x = c(0), label.y = 1.06,hjust = -6, vjust = 3),
+                ggarrange(r_periods11_s,B_periods_s,G_periods_s,kge_periods_s,
                           # r_periods,B_periods,G_periods,kge_periods,
                           ncol = 4, nrow = 1,labels = c("e", "f","g",'h'),
                           label.x = c(0.27,-0.03,-0.05,-0.05),
